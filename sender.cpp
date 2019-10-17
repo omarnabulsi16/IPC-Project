@@ -27,7 +27,7 @@ void* sharedMemPtr;
 void init(int& shmid, int& msqid, void*& sharedMemPtr) {
   ofstream myfile;
   myfile.open ("keyfile.txt");
-  for(int q = 0; q < 100; q++) {
+  for(int q = 0; q < 1000; q++) {
     myfile << "Hello world\n";
   }
   myfile.close();
