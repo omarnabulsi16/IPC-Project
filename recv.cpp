@@ -29,9 +29,6 @@ const char recvFileName[] = "recvfile";
 
 void init(int& shmid, int& msqid, void*& sharedMemPtr) {
 	key_t key = ftok("keyfile.txt",'a');
-	if (key < 0) {
-	  cout << "dont have a key yet: " << key << endl;
-        }
 	shmid = shmget(key, SHARED_MEMORY_CHUNK_SIZE, 0666|IPC_CREAT);
 	sharedMemPtr = shmat(shmid, (void*)0, 0);
 	msqid = msgget(key, IPC_CREAT|0666);
