@@ -50,7 +50,7 @@ void mainLoop() {
 	message rcvMsg;
 	int k = msgrcv(msqid, &rcvMsg, sizeof(rcvMsg), SENDER_DATA_TYPE, 0);
 	msgSize = rcvMsg.size;
-	cout << "msgSize = " << msgSize << endl;
+	cout << "Message Size = " << msgSize << endl;
 
 	/* Keep receiving until the sender set the size to 0, indicating that
  	 * there is no more data to send
