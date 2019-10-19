@@ -24,19 +24,19 @@ void* sharedMemPtr;
  */
 
 void init(int& shmid, int& msqid, void*& sharedMemPtr) {
+  // create file
   ofstream myfile;
+  //open file
   myfile.open ("keyfile.txt");
-  for(int q = 0; q < 1000; q++) {
+  for(int q = 0; q < 2000; q++) {
     myfile << "Hello world\n";
   }
+  // close file
   myfile.close();
+	
   //create key
   key_t key = ftok("keyfile.txt",'a');
   shmid = shmget(key, SHARED_MEMORY_CHUNK_SIZE, 0666|IPC_CREAT);
-  if (shmid < 0) {
-    cout << "error\n";
-    exit(1);
-  }
   sharedMemPtr = shmat(shmid, (void*)0 ,0);
   msqid = msgget(key, IPC_CREAT|0666);
 }
@@ -82,27 +82,19 @@ void send(const char* fileName) {
 			perror("fread");
 			exit(-1);
 		}
-		cout << "sent message size = " << sndMsg.size << " bytes.\n";
+		cout << "Sent message size = " << sndMsg.size << " bytes.\n";
 		sndMsg.mtype = SENDER_DATA_TYPE;
 		int w = msgsnd(msqid, &sndMsg,sizeof(sndMsg),0);
-		if(w < 0) {
-		  cout << "message failed to send\n";
-		}
 	        if(msgrcv(msqid, &rcvMsg, sizeof(rcvMsg), RECV_DONE_TYPE, 0) < 0 && (sndMsg.size != 0)) {
-			 cout << "error receiving message from Receiver\n";
+			 cout << "Error receiving message\n";
 		 } else if(rcvMsg.mtype == RECV_DONE_TYPE && (sndMsg.size!=0)) {
-			 cout << "received message from receiver, keep sending...\n";
+			 cout << "Message recieved, keep sending \n";
 		 }
 	}
 	if(sndMsg.size!=0) {
 	  sndMsg.mtype = SENDER_DATA_TYPE;
 	  sndMsg.size = 0;
 	  int d = msgsnd(msqid, &sndMsg, sizeof(rcvMsg),0);
-	  if(d < 0) {
-	    cout << "send size 0 fail\n";
-	  } else {
-	    cout << "sent 0 to receiver\n";
-	  }
         }
 
 	/* Close the file */
