@@ -50,7 +50,7 @@ void mainLoop() {
 	message rcvMsg;
 	int k = msgrcv(msqid, &rcvMsg, sizeof(rcvMsg), SENDER_DATA_TYPE, 0);
 	msgSize = rcvMsg.size;
-	cout << "Message Size = " << msgSize << endl;
+	cout << "Message Size = " << msgSize << "\n";
 
 	/* Keep receiving until the sender set the size to 0, indicating that
  	 * there is no more data to send
@@ -65,15 +65,9 @@ void mainLoop() {
 			}
 			rcvMsg.mtype = RECV_DONE_TYPE;
 			int m = msgsnd(msqid, &rcvMsg,sizeof(rcvMsg) ,0);
-			if(m < 0) {
-			     	cout << "Message Send FAILED\n";
-			}
 			int p  = msgrcv(msqid, &rcvMsg, sizeof(rcvMsg), SENDER_DATA_TYPE, 0);
-			if(p < 0) {
-			        cout << "Message Receive FAILED\n";
-			}
 			msgSize = rcvMsg.size;
-			cout << "msgSize = " << msgSize << endl;
+			cout << "Message Size = " << msgSize << "\n";
 		} else {
      			fclose(fp);
 		}
@@ -89,7 +83,7 @@ void mainLoop() {
 
 void cleanUp(const int& shmid, const int& msqid, void* sharedMemPtr) {
   shmdt(sharedMemPtr);
-  shmctl(shmid,IPC_RMID,NULL);
+  shmctl(shmid, IPC_RMID, NULL);
   msgctl(msqid, IPC_RMID, NULL);
   cout << "Cleaned Up\n";
 }
