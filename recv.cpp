@@ -49,6 +49,9 @@ void mainLoop() {
 	}
 	message rcvMsg;
 	int k = msgrcv(msqid, &rcvMsg, sizeof(rcvMsg), SENDER_DATA_TYPE, 0);
+	if(k < 0) {
+		cout << "Message was not recieved\n";	
+	}
 	msgSize = rcvMsg.size;
 	cout << "Message Size = " << msgSize << "\n";
 
@@ -65,6 +68,9 @@ void mainLoop() {
 			}
 			rcvMsg.mtype = RECV_DONE_TYPE;
 			int m = msgsnd(msqid, &rcvMsg,sizeof(rcvMsg) ,0);
+			if(m < 0) {
+				cout << "Message failed to send\n";	
+			}
 			int p  = msgrcv(msqid, &rcvMsg, sizeof(rcvMsg), SENDER_DATA_TYPE, 0);
 			msgSize = rcvMsg.size;
 			cout << "Message Size = " << msgSize << "\n";
