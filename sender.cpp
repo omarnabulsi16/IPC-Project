@@ -85,6 +85,9 @@ void send(const char* fileName) {
 		cout << "Sent message size = " << sndMsg.size << " bytes.\n";
 		sndMsg.mtype = SENDER_DATA_TYPE;
 		int w = msgsnd(msqid, &sndMsg,sizeof(sndMsg),0);
+		if(w < 0) {
+			cout << "Message failed to send\n";	
+		}
 	        if(msgrcv(msqid, &rcvMsg, sizeof(rcvMsg), RECV_DONE_TYPE, 0) < 0 && (sndMsg.size != 0)) {
 			 cout << "Error receiving message\n";
 		 } else if(rcvMsg.mtype == RECV_DONE_TYPE && (sndMsg.size!=0)) {
@@ -95,6 +98,11 @@ void send(const char* fileName) {
 	  sndMsg.mtype = SENDER_DATA_TYPE;
 	  sndMsg.size = 0;
 	  int d = msgsnd(msqid, &sndMsg, sizeof(rcvMsg),0);
+	  if(d < 0) {
+		cout << "Send size of 0 fail\n";
+	  } else {	
+		cout << "Sent 0 to the receiver\n";
+	  }
         }
 
 	/* Close the file */
