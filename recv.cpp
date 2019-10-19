@@ -49,9 +49,6 @@ void mainLoop() {
 	}
 	message rcvMsg;
 	int k = msgrcv(msqid, &rcvMsg, sizeof(rcvMsg), SENDER_DATA_TYPE, 0);
-	if(k < 0) {   
-		cout << "Message Receive FAILED\n";
-	}
 	msgSize = rcvMsg.size;
 	cout << "msgSize = " << msgSize << endl;
 
